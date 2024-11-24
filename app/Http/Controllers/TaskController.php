@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreTaskRequest;
 use App\Http\Requests\UpdateTaskRequest;
 use App\Models\Task;
+use Illuminate\Support\Facades\Log;
+
 
 class TaskController extends Controller
 {
@@ -24,7 +26,10 @@ class TaskController extends Controller
     // Store a newly created task in storage
     public function store(StoreTaskRequest $request)
     {
-        $this->authorize('create', Task::class);
+        Log::info('Store method hit!');
+
+        Log::info('Request data: ', $request->all());
+
 
         $task = Task::create($request->validated());
 
