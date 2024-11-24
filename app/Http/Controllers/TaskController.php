@@ -13,7 +13,7 @@ class TaskController extends Controller
     // Display a listing of the tasks
     public function index()
     {
-        $this->authorize('viewAny', Task::class);
+        //$this->authorize('viewAny', Task::class);
 
         $tasks = Task::all();
 
@@ -43,7 +43,7 @@ class TaskController extends Controller
     // Display the specified task
     public function show(Task $task)
     {
-        $this->authorize('view', $task);
+        //$this->authorize('view', $task);
 
         return response()->json([
             'success' => true,
@@ -54,7 +54,7 @@ class TaskController extends Controller
     // Update the specified task in storage
     public function update(UpdateTaskRequest $request, Task $task)
     {
-        $this->authorize('update', $task);
+        //$this->authorize('update', $task);
 
         $task->update($request->validated());
 
@@ -68,7 +68,7 @@ class TaskController extends Controller
     // Remove the specified task from storage
     public function destroy(Task $task)
     {
-        $this->authorize('delete', $task);
+        //$this->authorize('delete', $task);
 
         $task->delete();
 
