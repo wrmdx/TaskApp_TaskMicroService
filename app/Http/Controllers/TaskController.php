@@ -2,7 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use App\Http\Requests\StoreTaskRequest;
+use App\Http\Requests\UpdateTaskRequest;
 use App\Models\Task;
 
 class TaskController extends Controller
@@ -10,7 +11,10 @@ class TaskController extends Controller
     // Display a listing of the tasks
     public function index()
     {
+        $this->authorize('viewAny', Task::class);
+
         $tasks = Task::all();
+
         return response()->json([
             'success' => true,
             'data' => $tasks
@@ -18,16 +22,11 @@ class TaskController extends Controller
     }
 
     // Store a newly created task in storage
-    public function store(Request $request)
+    public function store(StoreTaskRequest $request)
     {
-        $validatedData = $request->validate([
-            'title' => 'required|string|max:255',
-            'description' => 'nullable|string',
-            'status' => 'required|in:pending,completed,in-progress',
-            'due_date' => 'nullable|date',
-        ]);
+        $this->authorize('create', Task::class);
 
-        $task = Task::create($validatedData);
+        $task = Task::create($request->validated());
 
         return response()->json([
             'success' => true,
@@ -37,16 +36,9 @@ class TaskController extends Controller
     }
 
     // Display the specified task
-    public function show($id)
+    public function show(Task $task)
     {
-        $task = Task::find($id);
-
-        if (!$task) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Task not found'
-            ], 404);
-        }
+        $this->authorize('view', $task);
 
         return response()->json([
             'success' => true,
@@ -55,25 +47,11 @@ class TaskController extends Controller
     }
 
     // Update the specified task in storage
-    public function update(Request $request, $id)
+    public function update(UpdateTaskRequest $request, Task $task)
     {
-        $task = Task::find($id);
+        $this->authorize('update', $task);
 
-        if (!$task) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Task not found'
-            ], 404);
-        }
-
-        $validatedData = $request->validate([
-            'title' => 'sometimes|required|string|max:255',
-            'description' => 'nullable|string',
-            'status' => 'sometimes|required|in:pending,completed,in-progress',
-            'due_date' => 'nullable|date',
-        ]);
-
-        $task->update($validatedData);
+        $task->update($request->validated());
 
         return response()->json([
             'success' => true,
@@ -83,16 +61,9 @@ class TaskController extends Controller
     }
 
     // Remove the specified task from storage
-    public function destroy($id)
+    public function destroy(Task $task)
     {
-        $task = Task::find($id);
-
-        if (!$task) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Task not found'
-            ], 404);
-        }
+        $this->authorize('delete', $task);
 
         $task->delete();
 
