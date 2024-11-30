@@ -26,12 +26,15 @@ class StoreTaskRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required|string|max:255',
-            'description' => 'nullable|string',
-            'status' => 'required|in:pending,completed,in-progress',
-            'priority' => 'required|in:low,medium,high',
-            'due_date' => 'nullable|date',
-            'project_id' => ['required', 'integer', new ValidProject],
+            'name' => 'required|string|max:255', // Name is required and must be a string
+            'description' => 'nullable|string', // Description is optional but must be a string
+            'status' => 'required|string|in:open,closed', // Must be "open" or "closed"
+            'priority' => 'required|string|in:low,medium,high', // Must be "low", "medium", or "high"
+            'due_date' => 'required|date', // Must be a valid date
+            'assigned_user_id' => 'required|integer', // Must exist in the users table
+            'created_by' => 'required|integer', // Must exist in the users table
+            'updated_by' => 'nullable|integer', // Optional but must exist in the users table if provided
+            'project_id' => 'required|integer', // Must exist in the projects table
         ];
     }
 }

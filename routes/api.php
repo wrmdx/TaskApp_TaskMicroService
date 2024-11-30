@@ -14,10 +14,11 @@ use App\Http\Controllers\TaskController;
 |
 */
 
-Route::prefix('tasks')->group(function () {
+Route::middleware('verifyTokenMiddleware')->prefix('tasks')->group(function () {
+//Route::prefix('tasks')->group(function () {
     Route::get('/', [TaskController::class, 'index']); // List all tasks
     Route::post('/', [TaskController::class, 'store']); // Create a new task
-    Route::get('/{id}', [TaskController::class, 'show']); // Get a specific task
-    Route::put('/{id}', [TaskController::class, 'update']); // Update a specific task
-    Route::delete('/{id}', [TaskController::class, 'destroy']); // Delete a specific task
+    Route::get('/{task}', [TaskController::class, 'show']); // Get a specific task
+    Route::put('/{task}', [TaskController::class, 'update']); // Update a specific task
+    Route::delete('/{task}', [TaskController::class, 'destroy']); // Delete a specific task
 });

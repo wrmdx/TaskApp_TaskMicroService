@@ -26,12 +26,15 @@ class UpdateTaskRequest extends FormRequest
     public function rules()
     {
         return [
-            'title' => 'sometimes|required|string|max:255',
-            'description' => 'nullable|string',
-            'status' => 'sometimes|required|in:pending,completed,in-progress',
-            'due_date' => 'nullable|date',
-            'priority' => 'required|in:low,medium,high',
-            'project_id' => ['sometimes', 'integer', new ValidProject],
+            'name' => 'sometimes|required|string|max:255', // Optional but must be valid if provided
+            'description' => 'nullable|string', // Optional and must be a string if provided
+            'status' => 'sometimes|required|string|in:open,closed', // Optional but must be "open" or "closed"
+            'priority' => 'sometimes|required|string|in:low,medium,high', // Optional but must be valid if provided
+            'due_date' => 'sometimes|required|date', // Optional but must be a valid date
+            'assigned_user_id' => 'sometimes|required|integer', // Optional but must exist in users table
+            'created_by' => 'sometimes|required|integer', // Optional but must exist in users table
+            'updated_by' => 'nullable|integer', // Optional and must exist in users table if provided
+            'project_id' => 'sometimes|required|integer', // Optional but must exist in projects table
         ];
     }
 }

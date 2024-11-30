@@ -6,7 +6,7 @@ services:
         build:
             context: .
             dockerfile: Dockerfile
-        container_name: laravel-app
+        container_name: laravel-tasks-app
         ports:
             - "8001:8001"
         volumes:
@@ -27,10 +27,9 @@ services:
         image: mysql:8.0
         container_name: mysql-db
         environment:
-            MYSQL_ROOT_PASSWORD:
+            MYSQL_ALLOW_EMPTY_PASSWORD: yes
             MYSQL_DATABASE: tasks
             MYSQL_USER: root
-            MYSQL_PASSWORD:
         volumes:
             - db_data:/var/lib/mysql
         networks:
